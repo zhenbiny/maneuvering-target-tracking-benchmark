@@ -1,99 +1,67 @@
 # Maneuvering Target Tracking Benchmark
 
-Public MATLAB benchmark for maneuvering target tracking under noisy 2D position
-measurements. The project compares five classical tracking strategies with one
-shared scenario, one shared evaluation rule, and one shared visualization
-pipeline.
+MATLAB benchmark for maneuvering target tracking under noisy 2D position
+measurements. The repository contains a legacy experiment and an extended
+multi-algorithm benchmark built on the same trajectory-generation and
+evaluation idea.
 
 ![MATLAB](https://img.shields.io/badge/MATLAB-compatible-orange)
 ![Algorithms](https://img.shields.io/badge/algorithms-5-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Status](https://img.shields.io/badge/status-public%20benchmark-success)
 
 ![Benchmark animation](docs/assets/comparison_animation.gif)
 
-## What This Repository Shows
+## Overview
 
-- a piecewise maneuvering target trajectory with straight and turning segments
-- noisy position-only measurements
-- five tracking algorithms evaluated under the same conditions
-- segment-wise threshold checking, overall RMSE comparison, and runtime analysis
-- report-ready figures and animation export for presentation use
+This project focuses on comparing classical tracking methods on the same
+maneuvering-target scenario.
 
-## Visual Snapshot
+- state and measurement generation are unified across algorithms
+- segment-wise RMSE thresholds are used for evaluation
+- static figures and animations are exported automatically after each run
 
-<p align="center">
-  <img src="docs/assets/trajectory_overview.png" width="48%" alt="Trajectory overview" />
-  <img src="docs/assets/maneuver_zoom.png" width="48%" alt="Maneuver window comparison" />
-</p>
+The benchmark currently includes:
 
-<p align="center">
-  <img src="docs/assets/leaderboard_summary.png" width="70%" alt="Leaderboard summary" />
-</p>
-
-## Compared Algorithms
-
-| Algorithm | Core idea | Typical role in this repo |
-| --- | --- | --- |
-| `CA-KF` | Single constant-acceleration Kalman filter | Baseline single-model tracker |
-| `Singer-KF` | Correlated-acceleration model with smoothing | Strong offline benchmark |
-| `IE-KF` | Estimate maneuver input from innovation behavior | Maneuver reconstruction attempt |
-| `VD-KF` | Switch state dimension between simpler and richer kinematics | Adaptive model-complexity tracker |
-| `IMM-CV` | Fuse multiple motion models with probability weighting | Strong real-time benchmark |
-
-## Latest Benchmark Snapshot
-
-Current public preview figures correspond to the latest local benchmark run with
-`200` Monte Carlo trials, `10 s` sampling interval, and threshold limits of
-`50 m` on non-maneuver segments and `150 m` on maneuver segments.
-
-| Rank | Algorithm | Pass all thresholds | Non-maneuver x/y (m) | Maneuver x/y (m) | Overall position RMSE (m) | Runtime (s) |
-| --- | --- | --- | --- | --- | ---: | ---: |
-| 1 | `Singer-KF` | YES | 31.32 / 31.59 | 51.30 / 52.33 | 53.09 | 1.1125 |
-| 2 | `IMM-CV` | YES | 47.72 / 47.04 | 72.55 / 72.99 | 77.46 | 2.0019 |
-| 3 | `VD-KF` | NO | 57.09 / 56.82 | 106.01 / 105.56 | 102.09 | 0.9738 |
-| 4 | `CA-KF` | NO | 67.22 / 67.21 | 70.65 / 68.43 | 95.88 | 0.3524 |
-| 5 | `IE-KF` | NO | 105.96 / 103.28 | 87.07 / 86.98 | 142.21 | 1.1884 |
-
-Notes:
-
-- `Singer-KF` is the best offline result here because the rebuilt version uses
-  Rauch-Tung-Striebel smoothing.
-- `IMM-CV` is the strongest real-time method among the compared filters.
+- `CA-KF`
+- `Singer-KF`
+- `IE-KF`
+- `VD-KF`
+- `IMM-CV`
 
 ## Quick Start
 
-### Run the legacy experiment
-
-From the project root:
+Open MATLAB in the repository root:
 
 ```matlab
+cd('path_to_repository')
 clear functions
+```
+
+Run the legacy experiment:
+
+```matlab
 results = run_tracking_experiment;
 ```
 
-### Run the rebuilt benchmark from the project root
+Run the rebuilt benchmark from the repository root:
 
 ```matlab
-clear functions
 results = run_tracking_benchmark_from_root;
 ```
 
-### Run the rebuilt benchmark from its own folder
-
-From `tracking_benchmark_v2/`:
+Run the rebuilt benchmark from its own folder:
 
 ```matlab
+cd tracking_benchmark_v2
 clear functions
 results = run_tracking_benchmark;
 ```
 
-## Repository Layout
+## Repository Structure
 
 ```text
 project_root/
 |-- README.md
-|-- .gitignore
 |-- run_tracking_experiment.m
 |-- run_tracking_benchmark_from_root.m
 |-- legacy_tracking_project/
@@ -106,27 +74,66 @@ project_root/
     `-- 04_references/
 ```
 
-- `legacy_tracking_project/`: original experiment structure kept for
-  compatibility and historical reference
-- `tracking_benchmark_v2/`: rebuilt comparison framework with unified
-  evaluation, tuning, plotting, and animation export
-- `docs/assets/`: selected public preview figures used by this README
-- `private_local/`: ignored local-only materials such as private slides,
-  coursework drafts, reference PDFs, and generated outputs
+- `run_tracking_experiment.m`: root entry for the legacy two-scheme experiment
+- `run_tracking_benchmark_from_root.m`: root entry for the rebuilt benchmark
+- `legacy_tracking_project/`: original implementation with CA-KF and IMM-CV
+- `tracking_benchmark_v2/`: extended benchmark with unified evaluation,
+  tuning, visualization, and animation export
+- `docs/assets/`: figures and GIFs used by the project homepage
+- `docs/01_presentation/`: presentation-related notes and reusable materials
+- `docs/02_report_materials/`: report-oriented notes and writing support files
+- `docs/03_specifications/`: scenario summary and benchmark settings
+- `docs/04_references/`: reference list for the algorithms and related study
 
-## Public vs Local-Only Content
+## Main Outputs
 
-The public repository keeps runnable MATLAB source code, lightweight
-documentation, and selected preview figures. Private presentation files,
-coursework drafts, downloaded papers, and bulk generated outputs stay under
-`private_local/`, which is ignored by Git.
+After running the rebuilt benchmark, `tracking_benchmark_v2/outputs/` typically
+contains:
 
-See `docs/README.md` for the documentation structure.
+- trajectory comparison figures
+- RMSE comparison figures
+- maneuver-window zoom figures
+- leaderboard tables in CSV and Markdown format
+- per-algorithm animations in GIF and MP4 format
 
-## Open-Source Support Files
+## Visual Snapshot
 
-- `LICENSE`: MIT license for public reuse
-- `CONTRIBUTING.md`: contribution and verification guide
-- `CODE_OF_CONDUCT.md`: collaboration expectations
-- `CITATION.md`: suggested repository citation
-- `.github/`: issue and pull request templates for cleaner collaboration
+<p align="center">
+  <img src="docs/assets/trajectory_overview.png" width="48%" alt="Trajectory overview" />
+  <img src="docs/assets/maneuver_zoom.png" width="48%" alt="Maneuver window comparison" />
+</p>
+
+<p align="center">
+  <img src="docs/assets/leaderboard_summary.png" width="70%" alt="Leaderboard summary" />
+</p>
+
+## Algorithms
+
+| Algorithm | Core idea |
+| --- | --- |
+| `CA-KF` | Single constant-acceleration Kalman filter |
+| `Singer-KF` | Correlated-acceleration model with smoothing support |
+| `IE-KF` | Input-estimation-based maneuver tracking |
+| `VD-KF` | Variable-dimension state switching |
+| `IMM-CV` | Interactive multiple-model fusion with constant-velocity submodels |
+
+## Benchmark Snapshot
+
+The current public preview corresponds to a benchmark run with:
+
+- sampling interval `10 s`
+- final time `1000 s`
+- `200` Monte Carlo trials
+- non-maneuver threshold `50 m`
+- maneuver threshold `150 m`
+
+| Rank | Algorithm | Pass all thresholds | Overall position RMSE (m) | Runtime (s) |
+| --- | --- | --- | ---: | ---: |
+| 1 | `Singer-KF` | YES | 53.09 | 1.1125 |
+| 2 | `IMM-CV` | YES | 77.46 | 2.0019 |
+| 3 | `VD-KF` | NO | 102.09 | 0.9738 |
+| 4 | `CA-KF` | NO | 95.88 | 0.3524 |
+| 5 | `IE-KF` | NO | 142.21 | 1.1884 |
+
+For the detailed benchmark implementation, see
+`tracking_benchmark_v2/README.md`.

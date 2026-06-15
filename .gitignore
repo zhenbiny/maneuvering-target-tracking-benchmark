@@ -1,5 +1,6 @@
 # Local private materials that should never be published
 private_local/
+_gitdata/
 
 # Operating-system and editor files
 .DS_Store
