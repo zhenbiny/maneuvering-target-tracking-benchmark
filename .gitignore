@@ -1,0 +1,33 @@
+# Local private materials that should never be published
+private_local/
+
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# MATLAB local files
+*.asv
+
+# Generated outputs
+legacy_tracking_project/outputs/
+tracking_benchmark_v2/outputs/
+*.fig
+*.gif
+*.mp4
+!docs/assets/*.gif
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.xdv
+*.synctex.gz
+
+# Local slide/spec/reference binaries kept outside the public repo
+docs/01_presentation/*.pdf
+docs/01_presentation/*.pptx
+docs/03_specifications/*.pdf
+docs/04_references/*.pdf
